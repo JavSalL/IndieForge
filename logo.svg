@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 204" width="200" height="204" role="img" aria-labelledby="t">
+  <title id="t">IndieForge</title>
+  <!-- Caras del cubo isométrico -->
+  <path d="M100 10 L180 56 L100 102 L20 56 Z" fill="#E5B229"/>
+  <path d="M20 56 L100 102 L100 194 L20 148 Z" fill="#28363F"/>
+  <path d="M100 102 L180 56 L180 148 L100 194 Z" fill="#28363F"/>
+
+  <!-- Engrane en la cara superior -->
+  <g transform="matrix(80 -46 80 46 20 56)">
+    <path fill="#28363F" d="M0.7548 0.4483 L0.8371 0.4559 L0.8371 0.5441 L0.7548 0.5517 L0.7167 0.6437 L0.7696 0.7072 L0.7072 0.7696 L0.6437 0.7167 L0.5517 0.7548 L0.5441 0.8371 L0.4559 0.8371 L0.4483 0.7548 L0.3563 0.7167 L0.2928 0.7696 L0.2304 0.7072 L0.2833 0.6437 L0.2452 0.5517 L0.1629 0.5441 L0.1629 0.4559 L0.2452 0.4483 L0.2833 0.3563 L0.2304 0.2928 L0.2928 0.2304 L0.3563 0.2833 L0.4483 0.2452 L0.4559 0.1629 L0.5441 0.1629 L0.5517 0.2452 L0.6437 0.2833 L0.7072 0.2304 L0.7696 0.2928 L0.7167 0.3563 Z"/>
+    <circle cx="0.5" cy="0.5" r="0.145" fill="#E5B229"/>
+    <circle cx="0.5" cy="0.5" r="0.075" fill="#28363F"/>
+  </g>
+
+  <!-- «if(» en la cara izquierda -->
+  <g transform="matrix(0.8 0.46 0 0.92 20 56)" fill="#E5B229">
+    <circle cx="21" cy="29" r="7"/>
+    <rect x="15" y="41" width="12" height="42"/>
+    <path d="M36 83 V40 C36 29 42 22 54 22 H57 V33 H55 C49.5 33 48 35.5 48 41 V83 Z"/>
+    <rect x="30" y="43" width="26" height="10"/>
+    <path d="M80 18 C63 34 59 50 59 62 C59 74 63 84 72 95 L80 89 C73 80 71 72 71 62 C71 51 75 38 88 25 Z"/>
+  </g>
+
+  <!-- Yunque, cubo y notas en la cara derecha -->
+  <path fill="#F0E4BE" d="M105 124 L128 117 L172 117 L172 126 L160 128 C155 130 153 133 153 138 C153 143 157 146 163 148 L163 154 L125 154 L125 148 C131 146 135 143 135 138 C135 134 132 131 127 130 C118 129 111 127 105 124 Z"/>
+  <path fill="#E5B229" d="M130 92 L141 86 L152 92 L141 98 Z"/>
+  <path fill="#F0E4BE" d="M130 92 L141 98 L141 111 L130 105 Z"/>
+  <path fill="#C99A1E" d="M141 98 L152 92 L152 105 L141 111 Z"/>
+  <g fill="#E5B229">
+    <ellipse cx="160" cy="89" rx="4.2" ry="3.2" transform="rotate(-20 160 89)"/>
+    <path d="M163.2 88 V72 C167 73 170 75.5 170.5 79 C169 77.5 166.8 77 165.4 77 V88 Z"/>
+    <ellipse cx="166" cy="106" rx="3.6" ry="2.8" transform="rotate(-20 166 106)"/>
+    <path d="M168.8 105 V92 C172 93 174.5 95 175 98 C173.8 96.8 172 96.4 170.8 96.4 V105 Z"/>
+  </g>
+
+  <!-- Separaciones blancas entre caras -->
+  <path d="M100 102 L20 56 M100 102 L180 56 M100 102 L100 194" stroke="#FFFFFF" stroke-width="5" fill="none" stroke-linecap="butt"/>
+</svg>
