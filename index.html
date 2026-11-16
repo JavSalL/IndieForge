@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IndieForge · Catálogo v1</title>
+<meta name="description" content="Modelos 3D, música, SFX, shaders y código para Unity, Unreal y Godot por una cuota mensual. Catálogo y demostración v1 de IndieForge.">
+<link rel="icon" href="logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#161e24;      /* fondo principal */
+  --slate:#28363f;      /* fondo secundario, tono del cubo */
+  --slate-2:#1e2930;    /* paso de tono entre superficies oscuras */
+  --cream:#f0e4be;      /* tinta sobre oscuro */
+  --paper:#efebe0;      /* fondo claro, papel de ticket */
+  --paper-2:#e4dfd0;    /* paso de tono sobre papel */
+  --ink:#161e24;        /* tinta sobre claro */
+  --gold:#e5b229;       /* acento: acción y campo de creadores */
+  --gold-2:#d4a11c;
+  --dim:#c9bf9f;        /* notas secundarias sobre oscuro */
+  --dim-ink:#4d5961;    /* notas secundarias sobre claro */
+
+  --f:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --gut:clamp(16px,2.4vw,32px);
+  --max:1440px;
+  --sec:clamp(96px,12vw,200px);
+
+  --t-display:clamp(3rem,7.4vw,8.25rem);
+  --t-h2:clamp(2.25rem,4.6vw,4.75rem);
+  --t-statement:clamp(1.375rem,2.1vw,2rem);
+  --t-body:clamp(1.0625rem,1.1vw,1.1875rem);
+  --t-small:0.9375rem;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--night);color:var(--cream);font-family:var(--f);font-size:var(--t-body);line-height:1.55;font-variation-settings:"wdth" 100}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+::selection{background:var(--gold);color:var(--night)}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gut)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.num{font-variant-numeric:tabular-nums}
+
+h1,h2,h3{margin:0;font-weight:800;letter-spacing:-0.02em;line-height:.95;font-stretch:75%;font-variation-settings:"wdth" 75}
+h1{font-size:var(--t-display)}
+h2{font-size:var(--t-h2)}
+h3{font-size:clamp(1.25rem,1.6vw,1.5rem);line-height:1.15;letter-spacing:-0.01em;font-stretch:100%;font-variation-settings:"wdth" 100}
+p{margin:0 0 1em}
+.statement{font-size:var(--t-statement);line-height:1.3;max-width:34ch;letter-spacing:-0.01em}
+
+/* Botones: planos, esquinas rectas */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5em;min-height:52px;padding:0 26px;background:var(--gold);color:var(--night);font-weight:700;text-decoration:none;border:0;border-radius:0;cursor:pointer;transition:transform .18s var(--ease),background-color .18s var(--ease)}
+.btn:hover{background:#f1c444;transform:translateY(-2px)}
+.btn:active{transform:translateY(1px)}
+.btn.dark{background:var(--night);color:var(--cream)}
+.btn.dark:hover{background:var(--slate)}
+.link{font-weight:600;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px;transition:color .15s}
+.link:hover{color:var(--gold)}
+
+/* Barra superior */
+.bar{position:sticky;top:0;z-index:40;background:var(--night)}
+.bar .wrap{display:flex;align-items:center;gap:32px;height:72px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:800;font-size:1.375rem;letter-spacing:-0.02em}
+.mark{width:40px;height:40px;background:#fff;position:relative;overflow:hidden;flex:none}
+.mark img{position:absolute;width:160%;max-width:none;left:-30%;top:-11.7%}
+.bar nav{display:flex;gap:28px;margin-left:auto}
+.bar nav a{text-decoration:none;font-weight:500;transition:color .15s}
+.bar nav a:hover{color:var(--gold)}
+.bar .btn{min-height:44px;padding:0 18px;white-space:nowrap;gap:0}
+
+/* Portada */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);min-height:clamp(640px,calc(100svh - 72px),940px);background:var(--night)}
+.hero-text{display:flex;flex-direction:column;justify-content:space-between;gap:48px;padding:clamp(40px,6vw,96px) var(--gut) clamp(32px,4vw,56px) max(var(--gut),calc((100vw - var(--max))/2 + var(--gut)))}
+.hero h1{font-size:clamp(3rem,6.6vw,7.5rem)}
+.hero .lead{font-size:var(--t-statement);line-height:1.3;max-width:30ch;margin:28px 0 32px}
+.hero .actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px}
+.facts{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:8px 40px;margin:0;padding:0;list-style:none}
+.facts b{display:block;font-size:clamp(1.75rem,2.6vw,2.5rem);font-weight:800;line-height:1;color:var(--gold);font-variation-settings:"wdth" 75}
+.facts span{font-size:var(--t-small);color:var(--dim)}
+.hero-pic{position:relative;margin:0;overflow:hidden;background:#0d1216}
+.hero-pic img{width:100%;height:100%;object-fit:cover;object-position:45% 50%;transform-origin:40% 60%;animation:drift 28s ease-in-out infinite alternate}
+@keyframes drift{from{transform:scale(1.02)}to{transform:scale(1.1) translate(-1.5%,-1%)}}
+.hero-pic figcaption{position:absolute;left:0;bottom:0;padding:10px var(--gut) 12px;background:rgba(13,18,22,.82);font-size:.8125rem;color:var(--dim);max-width:100%}
+
+/* Catálogo como ticket */
+.ticket{background:var(--paper);color:var(--ink);padding:var(--sec) 0}
+.ticket-head{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:32px 64px;align-items:end;margin-bottom:56px}
+.ticket-head p{margin:0;max-width:44ch}
+.filters{display:flex;flex-wrap:wrap;gap:10px 28px;align-items:center;margin-bottom:24px}
+.seg{display:flex;flex-wrap:wrap;gap:4px}
+.seg button{min-height:44px;padding:0 14px;background:var(--paper-2);border:0;cursor:pointer;font-weight:600;font-size:var(--t-small);transition:background-color .15s,color .15s,transform .15s}
+.seg button:hover{background:#d8d1bd}
+.seg button:active{transform:scale(.97)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.search{min-height:44px;padding:0 14px;background:#fff;border:2px solid var(--paper-2);min-width:min(280px,100%);font-size:var(--t-small)}
+.search:focus{border-color:var(--ink);outline:none}
+.ledger{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:24px 40px;align-items:start}
+.rows{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.row{position:relative}
+.row input{position:absolute;opacity:0;width:1px;height:1px}
+.row label{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:4px 18px;padding:20px 22px;background:#f7f4ec;cursor:pointer;transition:background-color .15s,transform .15s}
+.row label:hover{background:#fff}
+.row label:active{transform:scale(.995)}
+.box{width:24px;height:24px;margin-top:3px;background:var(--paper-2);display:grid;place-items:center;transition:background-color .15s}
+.box svg{width:16px;height:16px;opacity:0;transition:opacity .15s}
+.row input:checked + label{background:var(--ink);color:var(--paper)}
+.row input:checked + label .box{background:var(--gold)}
+.row input:checked + label .box svg{opacity:1}
+.row input:checked + label .meta{color:#b9c2c8}
+.row input:focus-visible + label{outline:3px solid var(--gold);outline-offset:2px}
+.row .name{font-weight:700;font-size:clamp(1.0625rem,1.3vw,1.25rem);line-height:1.25}
+.row .meta{grid-column:2;font-size:var(--t-small);color:var(--dim-ink);margin-top:4px}
+.row .spec{grid-column:2;margin-top:6px}
+.row .price{grid-row:1;grid-column:3;font-weight:800;font-size:clamp(1.125rem,1.4vw,1.375rem);text-align:right;white-space:nowrap}
+.row[hidden]{display:none}
+.empty{padding:24px;background:#f7f4ec}
+.total{position:sticky;top:96px;background:var(--night);color:var(--cream);padding:32px 28px}
+.total h3{font-size:1.5rem;margin-bottom:20px}
+.total dl{margin:0;display:grid;gap:18px}
+.total dt{font-size:var(--t-small);color:var(--dim)}
+.total dd{margin:2px 0 0;font-weight:800;line-height:1;font-variation-settings:"wdth" 75}
+.total .store dd{font-size:clamp(2.25rem,3.4vw,3.25rem);text-decoration:line-through;text-decoration-thickness:4px;text-decoration-color:var(--gold)}
+.total .ours dd{font-size:clamp(2.25rem,3.4vw,3.25rem);color:var(--gold)}
+.total .ours dd small{font-size:1.125rem;font-weight:600;color:var(--cream)}
+.total .diff dd{font-size:1.5rem;font-variation-settings:"wdth" 100}
+.plan-pick{display:flex;gap:4px;margin:24px 0}
+.plan-pick button{flex:1;min-height:44px;background:var(--slate);border:0;color:var(--cream);cursor:pointer;font-weight:600;font-size:.875rem;transition:background-color .15s}
+.plan-pick button:hover{background:#34454f}
+.plan-pick button[aria-pressed="true"]{background:var(--cream);color:var(--night)}
+.total .note{font-size:.875rem;color:var(--dim);margin:20px 0 0}
+.total .btn{width:100%;margin-top:4px}
+
+/* Plugin */
+.plugin{padding:var(--sec) 0;background:var(--night)}
+.plugin-head{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:32px 64px;align-items:end;margin-bottom:56px}
+.plugin-head p{margin:0;max-width:44ch}
+.ui{background:#0f1418;color:#dfe5e9;font-size:15px}
+.ui-top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 18px;background:#232f37;font-size:14px}
+.ui-top strong{font-weight:700}
+.ui-top .ok{color:#8fd6a8}
+.ui-body{display:grid;grid-template-columns:260px minmax(0,1fr)}
+.ui-side{background:#1a2329;padding:18px}
+.ui-side p{font-size:13px;color:#9aa8b2;margin:0 0 10px}
+.ui-tabs{display:flex;flex-direction:column;gap:4px}
+.ui-tabs button{text-align:left;min-height:44px;padding:0 14px;background:transparent;border:0;cursor:pointer;color:#c7d0d6;font-weight:600;transition:background-color .15s,color .15s}
+.ui-tabs button:hover{background:#26323a}
+.ui-tabs button[aria-selected="true"]{background:var(--gold);color:var(--night)}
+.ui-lic{margin-top:22px;font-size:13px;color:#9aa8b2;line-height:1.7}
+.ui-main{padding:28px;display:grid;gap:22px;align-content:start}
+.ui-main h3{color:#fff;font-size:clamp(1.25rem,1.8vw,1.75rem)}
+.ui-main .desc{color:#b8c3ca;margin:8px 0 0;max-width:60ch}
+.ui-path{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;font-size:14px;color:#9aa8b2}
+.ui-path code,.log{font-family:Consolas,"SF Mono",Menlo,monospace}
+.ui-path code{color:var(--gold);font-size:14px;word-break:break-all}
+.ui-actions{display:flex;flex-wrap:wrap;gap:10px}
+.ui-actions button{min-height:44px;padding:0 18px;border:0;cursor:pointer;font-weight:700;transition:transform .15s,background-color .15s}
+.ui-actions .go{background:var(--gold);color:var(--night)}
+.ui-actions .go:hover{background:#f1c444}
+.ui-actions .cert{background:#2c3a43;color:#e6ebee}
+.ui-actions .cert:hover{background:#364853}
+.ui-actions button:active{transform:translateY(1px)}
+.log{margin:0;background:#0a0e11;padding:16px 18px;min-height:140px;font-size:13.5px;line-height:1.7;color:#cfd8de;white-space:pre-wrap;overflow-wrap:anywhere}
+.log .y{color:var(--gold)}.log .g{color:#8fd6a8}
+.bar-prog{height:6px;background:#26323a;overflow:hidden}
+.bar-prog i{display:block;height:100%;width:0;background:var(--gold);transition:width .9s var(--ease)}
+
+/* Planes */
+.plans{background:var(--paper);color:var(--ink);padding:var(--sec) 0}
+.plans-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:24px 64px;margin-bottom:48px}
+.plans-head p{max-width:46ch;margin:0}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:separate;border-spacing:0;width:100%;min-width:860px}
+th,td{text-align:left;vertical-align:top;padding:16px 20px;font-size:var(--t-small);line-height:1.45}
+thead th{padding-top:28px;padding-bottom:24px;vertical-align:bottom}
+thead th .pn{display:block;font-size:clamp(1.25rem,1.6vw,1.5rem);font-weight:800;line-height:1.1;letter-spacing:-0.01em}
+thead th .pp{display:block;font-size:clamp(2rem,3vw,2.75rem);font-weight:800;line-height:1;margin-top:14px;font-variation-settings:"wdth" 75}
+thead th .pu{display:block;font-weight:500;font-size:.875rem;margin-top:6px}
+tbody th{font-weight:700;width:16%;color:var(--dim-ink)}
+tbody tr:nth-child(odd) td,tbody tr:nth-child(odd) th{background:#f6f3ea}
+.hl{background:var(--gold)!important}
+td.hl,th.hl{color:var(--night)}
+tfoot td{padding-top:24px;padding-bottom:28px}
+tfoot .btn{width:100%;min-height:48px;padding:0 12px;font-size:.9375rem}
+.yes::before{content:"Sí. ";font-weight:700}
+.plans .after{margin-top:20px;font-size:var(--t-small);color:var(--dim-ink);max-width:80ch}
+
+/* Creadores */
+.pool{background:var(--gold);color:var(--night);padding:var(--sec) 0 0;overflow:hidden}
+.pool-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px 64px;align-items:end}
+.pool .big{font-size:clamp(9rem,27vw,26rem);font-weight:900;line-height:.78;letter-spacing:-0.05em;margin:0 0 0 -0.04em;font-variation-settings:"wdth" 75}
+.pool .big span{font-size:.45em;letter-spacing:0}
+.pool h2{margin:40px 0 28px}
+.pool .steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:0;padding:0;list-style:none}
+.pool .steps strong{display:block;font-size:1.25rem;line-height:1.2;margin-bottom:8px}
+.pool .steps p{margin:0}
+.pool figure{margin:0;align-self:stretch;display:flex;flex-direction:column;justify-content:flex-end}
+.pool figure img{width:100%;aspect-ratio:3/4;object-fit:cover}
+.pool figcaption{font-size:.8125rem;padding:10px 0 14px;color:#3a3313}
+.example{background:var(--night);color:var(--cream);margin-top:72px}
+.example .wrap{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:24px 64px;padding-top:48px;padding-bottom:48px;align-items:center}
+.example h3{font-size:1.5rem}
+.example p{margin:0;font-size:var(--t-statement);line-height:1.35}
+.example b{color:var(--gold)}
+
+/* Jam Pass */
+.jam{background:var(--slate);padding:var(--sec) 0}
+.jam-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px 64px;align-items:center}
+.jam figure{margin:0 0 0 calc(-1 * max(var(--gut),(100vw - var(--max))/2 + var(--gut)))}
+.jam figure img{width:100%;aspect-ratio:3/2;object-fit:cover}
+.jam figcaption{font-size:.8125rem;color:var(--dim);padding:10px var(--gut) 0 max(var(--gut),calc((100vw - var(--max))/2 + var(--gut)))}
+.jam h2{margin-bottom:28px}
+.jam ul{margin:0 0 36px;padding:0 0 0 1.1em}
+.jam li{margin-bottom:8px}
+
+/* Preguntas */
+.faq{background:var(--paper);color:var(--ink);padding:var(--sec) 0}
+.faq-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px 80px;align-items:start}
+.faq-side{position:sticky;top:104px}
+.faq-side h2{margin-bottom:32px}
+.faq-side figure{margin:0}
+.faq-side img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.faq-side figcaption{font-size:.8125rem;color:var(--dim-ink);padding-top:10px}
+details{background:#f7f4ec;margin-bottom:4px;transition:background-color .15s}
+details[open]{background:#fff}
+summary{list-style:none;cursor:pointer;padding:22px 64px 22px 24px;font-weight:700;font-size:clamp(1.0625rem,1.3vw,1.25rem);line-height:1.3;position:relative}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";position:absolute;right:24px;top:50%;transform:translateY(-50%);font-size:1.75rem;font-weight:500;line-height:1;transition:transform .2s var(--ease)}
+details[open] summary::after{transform:translateY(-50%) rotate(45deg)}
+summary:hover{background:#fff}
+details .a{padding:0 24px 24px;max-width:64ch}
+details .a p:last-child{margin-bottom:0}
+
+/* Pie */
+footer{background:var(--night);padding:clamp(64px,8vw,120px) 0 40px}
+.wordmark{font-size:clamp(4rem,17.6vw,16.5rem);font-weight:900;line-height:.8;letter-spacing:-0.045em;margin:0 0 64px;font-variation-settings:"wdth" 75;white-space:nowrap}
+.wordmark span{color:var(--gold)}
+.foot{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px 48px;font-size:var(--t-small);line-height:1.6}
+.foot h3{font-size:1.0625rem;margin-bottom:12px}
+.foot p{margin:0 0 .6em}
+.foot .dim{color:var(--dim)}
+
+/* Entradas: solo con JS activo, el contenido es visible sin script */
+.js .rv{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease);transition-delay:calc(var(--i,0) * 75ms)}
+.js .rv.in{opacity:1;transform:none}
+.bump{animation:bump .35s var(--ease)}
+@keyframes bump{30%{transform:translateY(-3px)}}
+
+@media (max-width:1080px){
+  .bar nav{display:none}
+  .bar .btn{margin-left:auto}
+  .hero{grid-template-columns:1fr;min-height:0}
+  .hero-text{padding:48px var(--gut) 40px}
+  .hero h1{max-width:none}
+  .hero-pic{aspect-ratio:4/3}
+  .ledger{grid-template-columns:1fr}
+  .total{position:sticky;top:auto;bottom:0;padding:18px var(--gut);margin:0 calc(-1 * var(--gut));z-index:5}
+  .total h3,.total .note{display:none}
+  .total dl{grid-template-columns:auto auto 1fr;gap:4px 24px;align-items:end}
+  .total .store dd,.total .ours dd{font-size:1.875rem}
+  .total .diff dd{font-size:1.125rem}
+  .plan-pick{margin:14px 0 10px}
+  .ticket-head,.plugin-head,.pool-grid,.jam-grid,.faq-grid,.example .wrap{grid-template-columns:1fr}
+  .faq-side{position:static}
+  .jam figure{margin:0 calc(-1 * var(--gut))}
+  .jam figcaption{padding-left:var(--gut)}
+  .pool figure img{aspect-ratio:4/3}
+  .ui-body{grid-template-columns:1fr}
+  .ui-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .ui-tabs button{text-align:center;padding:0 8px;font-size:14px}
+  .foot{grid-template-columns:1fr 1fr}
+}
+@media (max-width:640px){
+  .hero h1{font-size:clamp(2.5rem,13vw,4.5rem)}
+  .bar .wrap{gap:12px}
+  .brand{font-size:1.2rem}
+  .bar .btn .long{display:none}
+  .facts{grid-template-columns:repeat(3,auto);gap:4px 22px}
+  .row label{grid-template-columns:24px minmax(0,1fr);padding:16px}
+  .row .price{grid-row:auto;grid-column:2;text-align:left;margin-top:6px}
+  .total{padding:12px var(--gut) 14px}
+  .total dl{grid-template-columns:1fr 1fr;gap:2px 16px}
+  .total dt{font-size:.8125rem}
+  .total .store dd,.total .ours dd{font-size:1.625rem}
+  .total .diff,.total > .btn{display:none}
+  .plan-pick{margin:10px 0 0}
+  .plan-pick button{min-height:40px}
+  .swipe{display:block!important}
+  th,td{padding:14px 14px}
+  tbody th,thead td,tfoot td:first-child{position:sticky;left:0;z-index:1;background:var(--paper);width:112px;min-width:112px}
+  tbody tr:nth-child(odd) th{background:#f6f3ea}
+  table{min-width:900px}
+  .total .ours dd small{font-size:.875rem}
+  .pool .steps{grid-template-columns:1fr}
+  .ui-top{flex-wrap:wrap}
+  .ui-main{padding:20px}
+  .foot{grid-template-columns:1fr}
+  .wordmark{font-size:23vw;margin-bottom:40px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important;transition-delay:0s!important}
+  .js .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="IndieForge, inicio">
+      <span class="mark"><img src="logo.jpg" alt="" width="1024" height="1024"></span>
+      IndieForge
+    </a>
+    <nav aria-label="Secciones">
+      <a href="#catalogo">Catálogo</a>
+      <a href="#plugin">Plugin</a>
+      <a href="#planes">Planes</a>
+      <a href="#creadores">Creadores</a>
+    </nav>
+    <a class="btn" href="#jam">Jam Pass<span class="long">&nbsp;gratis</span></a>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="inicio">
+  <div class="hero-text">
+    <div>
+      <h1 class="rv">Todos tus assets, una cuota</h1>
+      <p class="lead rv" style="--i:1">Modelos 3D, música, SFX, shaders y código que se importan en un clic dentro de Unity, Unreal y Godot. Desde $9.99 USD al mes.</p>
+      <div class="actions rv" style="--i:2">
+        <a class="btn" href="#catalogo">Ver el catálogo</a>
+        <a class="link" href="#jam">o prueba 7 días gratis en tu game jam</a>
+      </div>
+    </div>
+    <ul class="facts rv" style="--i:3">
+      <li><b class="num">+2,400</b><span>assets curados</span></li>
+      <li><b>3</b><span>motores</span></li>
+      <li><b class="num">45 %</b><span>para quien los crea</span></li>
+    </ul>
+  </div>
+  <figure class="hero-pic">
+    <img src="img/forja-hierro-1773.jpg" width="1686" height="1404" alt="Grabado del siglo XVIII: un herrero levanta una barra de hierro al rojo frente al martillo hidráulico de una forja, mientras su familia lo observa.">
+    <figcaption>An Iron Forge, Richard Earlom según Joseph Wright of Derby, 1773. Art Institute of Chicago, dominio público.</figcaption>
+  </figure>
+</section>
+
+<section class="ticket" id="catalogo" aria-labelledby="cat-h">
+  <div class="wrap">
+    <div class="ticket-head">
+      <h2 id="cat-h" class="rv">Arma tu prototipo y mira el ticket</h2>
+      <p class="rv" style="--i:1">Estos son los nueve paquetes de la versión 1 del catálogo, con el precio que tendrían comprados uno por uno en una tienda. Marca los que necesita tu juego: el ticket suma lo que pagarías por separado y lo compara con tu suscripción.</p>
+    </div>
+
+    <div class="filters rv" style="--i:2" role="group" aria-label="Filtros del catálogo">
+      <div class="seg" id="fCat" role="group" aria-label="Categoría">
+        <button type="button" data-v="all" aria-pressed="true">Todo</button>
+        <button type="button" data-v="3d" aria-pressed="false">Modelos 3D</button>
+        <button type="button" data-v="audio" aria-pressed="false">Música y SFX</button>
+        <button type="button" data-v="vfx" aria-pressed="false">Shaders y VFX</button>
+        <button type="button" data-v="2d" aria-pressed="false">Arte 2D y UI</button>
+        <button type="button" data-v="code" aria-pressed="false">Código</button>
+      </div>
+      <div class="seg" id="fEng" role="group" aria-label="Motor">
+        <button type="button" data-v="all" aria-pressed="true">Todos los motores</button>
+        <button type="button" data-v="Unity" aria-pressed="false">Unity</button>
+        <button type="button" data-v="Unreal" aria-pressed="false">Unreal</button>
+        <button type="button" data-v="Godot" aria-pressed="false">Godot</button>
+      </div>
+      <label class="sr" for="q">Buscar en el catálogo</label>
+      <input class="search" id="q" type="search" placeholder="Buscar: dungeon, audio, RPG…" autocomplete="off">
+    </div>
+
+    <div class="ledger">
+      <ul class="rows" id="rows">
+        <li class="row" data-cat="3d" data-eng="Unity Unreal Godot" data-price="85">
+          <input type="checkbox" id="p1" checked><label for="p1"><span class="box"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="#161e24" stroke-width="2.5"/></svg></span>
+          <span><span class="name">Cyberpunk Modular Alley &amp; Neon Props</span><span class="meta" style="display:block">Modelos 3D · Unity, Unreal, Godot · 420 MB</span><span class="spec" style="display:block">84 mallas modulares FBX/GLTF, texturas PBR 4K, anuncios animados y colisiones listas para armar niveles urbanos.</span></span>
+          <span class="price num">$85</span></label>
+        </li>
+        <li class="row" data-cat="audio" data-eng="Unity Unreal Godot" data-price="60">
+          <input type="checkbox" id="p2" checked><label for="p2"><span class="box"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="#161e24" stroke-width="2.5"/></svg></span>
+          <span><span class="name">Adaptive Dark Synthwave &amp; Boss OST Pack</span><span class="meta" style="display:block">Música y SFX · Unity, Unreal, Godot · 310 MB</span><span class="spec" style="display:block">22 pistas en bucle con stems separados para exploración, tensión y combate, más 180 efectos sci-fi en WAV de 24 bits.</span></span>
+          <span class="price num">$60</span></label>
+        </li>
+        <li class="row" data-cat="vfx" data-eng="Unity Unreal Godot" data-price="55">
+          <input type="checkbox" id="p3"><label for="p3"><span class="box"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="#161e24" stroke-width="2.5"/></svg></span>
+          <span><span class="name">Stylized Cel-Shader &amp; Anime VFX Suite</span><span class="meta" style="display:block">Shaders y VFX · Unity, Unreal, Godot · 95 MB</span><span class="spec" style="display:block">Iluminación toon, contornos dinámicos, agua estilizada y 45 sistemas de partículas optimizados.</span></span>
+          <span class="price num">$55</span></label>
+        </li>
+        <li class="row" data-cat="3d" data-eng="Unity Unreal Godot" data-price="70">
+          <input type="checkbox" id="p4"><label for="p4"><span class="box"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="#161e24" stroke-width="2.5"/></svg></span>
+          <span><span class="name">Low-Poly Fantasy Dungeon &amp; Weapons Kit</span><span class="meta" style="display:block">Modelos 3D · Unity, Unreal, Godot · 140 MB</span><span class="spec" style="display:block">Más de 210 piezas de calabozo, cofres, yunques y trampas animadas, y 60 armas cuerpo a cuerpo en un solo atlas.</span></span>
+          <span class="price num">$70</span></label>
+        </li>
+        <li class="row" data-cat="code" data-eng="Unity Godot" data-price="90">
+          <input type="checkbox" id="p5" checked><label for="p5"><span class="box"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="#161e24" stroke-width="2.5"/></svg></span>
+          <span><span class="name">Complete RPG Inventory, Dialogue &amp; Save System</span><span class="meta" style="display:block">Código y sistemas · Unity, Godot · 28 MB</span><span class="spec" style="display:block">Inventario por cuadrícula, árbol de diálogos en JSON y guardado cifrado, listo para producción.</span></span>
+          <span class="price num">$90</span></label>
+        </li>
+        <li class="row" data-cat="2d" data-eng="Unity Godot" data-price="50">
+          <input type="checkbox" id="p6"><label for="p6"><span class="box"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="#161e24" stroke-width="2.5"/></svg></span>
+          <span><span class="name">Pixel Art Metroidvania Biome &amp; Boss Sprites</span><span class="meta" style="display:block">Arte 2D y UI · Unity, Godot · 42 MB</span><span class="spec" style="display:block">Tilesets animados de 32 × 32, fondos parallax de 5 capas y 14 enemigos con hojas de sprites completas.</span></span>
+          <span class="price num">$50</span></label>
+        </li>
+        <li class="row" data-cat="audio" data-eng="Unity Unreal Godot" data-price="75">
+          <input type="checkbox" id="p7"><label for="p7"><span class="box"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="#161e24" stroke-width="2.5"/></svg></span>
+          <span><span class="name">Realistic Footsteps, Foley &amp; Weapons Audio</span><span class="meta" style="display:block">Música y SFX · Unity, Unreal, Godot · 510 MB</span><span class="spec" style="display:block">650 efectos grabados en estudio: pasos sobre 8 superficies, impactos metálicos y ambiente dinámico.</span></span>
+          <span class="price num">$75</span></label>
+        </li>
+        <li class="row" data-cat="2d" data-eng="Unity Unreal Godot" data-price="65">
+          <input type="checkbox" id="p8"><label for="p8"><span class="box"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="#161e24" stroke-width="2.5"/></svg></span>
+          <span><span class="name">Sci-Fi HUD &amp; Glassmorphism Game UI Kit</span><span class="meta" style="display:block">Arte 2D y UI · Unity, Unreal, Godot · 88 MB</span><span class="spec" style="display:block">Más de 300 componentes vectoriales editables: barras de vida, minimapas, menús y árboles de habilidades.</span></span>
+          <span class="price num">$65</span></label>
+        </li>
+        <li class="row" data-cat="code" data-eng="Unity Unreal" data-price="120">
+          <input type="checkbox" id="p9"><label for="p9"><span class="box"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="#161e24" stroke-width="2.5"/></svg></span>
+          <span><span class="name">Multiplayer Lobby, Netcode &amp; Matchmaking</span><span class="meta" style="display:block">Código y sistemas · Unity, Unreal · 64 MB</span><span class="spec" style="display:block">Plantilla para partidas cooperativas de 2 a 8 jugadores con sincronización de física y chat de voz.</span></span>
+          <span class="price num">$120</span></label>
+        </li>
+        <li class="empty" id="empty" hidden>Ningún paquete coincide con ese filtro. Prueba con otra categoría o motor.</li>
+      </ul>
+
+      <aside class="total" aria-live="polite" aria-labelledby="tot-h">
+        <h3 id="tot-h">Tu ticket</h3>
+        <dl>
+          <div class="store"><dt>En tiendas, <span id="cnt">3 paquetes</span></dt><dd class="num" id="store">$235</dd></div>
+          <div class="ours"><dt>Con IndieForge <span id="planName">Indie Comercial</span></dt><dd class="num"><span id="ours">$24.99</span> <small>/ mes</small></dd></div>
+          <div class="diff"><dt>Te ahorras el primer mes</dt><dd class="num" id="diff">$210.01</dd></div>
+        </dl>
+        <div class="plan-pick" role="group" aria-label="Plan para comparar">
+          <button type="button" data-p="9.99" data-n="Educativo" aria-pressed="false">Educativo</button>
+          <button type="button" data-p="24.99" data-n="Indie Comercial" aria-pressed="true">Indie</button>
+          <button type="button" data-p="79.99" data-n="Studio" aria-pressed="false">Studio</button>
+        </div>
+        <a class="btn" href="#planes">Ver los planes</a>
+        <p class="note">Precios de tienda de referencia, en USD, tomados de paquetes equivalentes en tiendas tradicionales.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="plugin" id="plugin" aria-labelledby="plug-h">
+  <div class="wrap">
+    <div class="plugin-head">
+      <h2 id="plug-h" class="rv">Se importa sin salir del motor</h2>
+      <p class="rv" style="--i:1">El plugin IndieForge Bridge vive dentro de tu editor. Eliges el paquete, el plugin lo descarga, lo coloca en la carpeta correcta de tu motor y deja registrado el uso para pagarle al creador. Sin ZIP y sin configurar materiales a mano. Pruébalo aquí: los paquetes que marcaste en el ticket aparecen en el editor.</p>
+    </div>
+
+    <div class="ui rv" style="--i:2" data-ui>
+      <div class="ui-top">
+        <span><strong>IndieForge Bridge 1.4</strong> · Licencia Indie Comercial <span class="ok">activa</span></span>
+        <span id="uiEngine">Unity 6 (URP)</span>
+      </div>
+      <div class="ui-body">
+        <div class="ui-side">
+          <p id="engLabel">Tu motor</p>
+          <div class="ui-tabs" role="tablist" aria-labelledby="engLabel">
+            <button type="button" role="tab" aria-selected="true" data-name="Unity 6 (URP)" data-path="Assets/IndieForge/Imported/">Unity 6</button>
+            <button type="button" role="tab" aria-selected="false" data-name="Unreal Engine 5.5" data-path="/Game/IndieForge/Assets/">Unreal 5.5</button>
+            <button type="button" role="tab" aria-selected="false" data-name="Godot 4.3" data-path="res://addons/indieforge/assets/">Godot 4.3</button>
+          </div>
+          <div class="ui-lic">Certificado de licencia<br>IF-2026-89B1<br>Paquetes en cola: <span id="queueN">3</span></div>
+        </div>
+        <div class="ui-main">
+          <div>
+            <h3 id="uiName">Cyberpunk Modular Alley &amp; Neon Props</h3>
+            <p class="desc" id="uiDesc">84 mallas modulares FBX/GLTF, texturas PBR 4K, anuncios animados y colisiones listas para armar niveles urbanos.</p>
+          </div>
+          <div class="ui-path">Destino <code id="uiPath">Assets/IndieForge/Imported/cyberpunk_modular_alley_neon_props/</code></div>
+          <div class="ui-actions">
+            <button type="button" class="go" id="importBtn">Importar a la escena</button>
+            <button type="button" class="cert" id="certBtn">Generar certificado de licencia</button>
+          </div>
+          <div class="bar-prog" aria-hidden="true"><i id="prog"></i></div>
+          <pre class="log" id="log" aria-live="polite">[Bridge] Listo. Motor: Unity 6 (URP).
+[Bridge] Elige un motor y pulsa «Importar a la escena».</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="plans" id="planes" aria-labelledby="plan-h">
+  <div class="wrap">
+    <div class="plans-head">
+      <h2 id="plan-h" class="rv">Cuatro planes, un catálogo</h2>
+      <p class="rv" style="--i:1">Todos abren el catálogo completo y los plugins de los tres motores. Lo que cambia es para qué puedes usar lo que importas y cuántas personas lo usan.</p>
+    </div>
+    <p class="after swipe"  style="display:none;margin:0 0 16px">Desliza la tabla hacia la izquierda para comparar los cuatro planes.</p>
+    <div class="table-scroll rv" style="--i:2" tabindex="0" aria-label="Tabla comparativa de planes">
+      <table>
+        <caption class="sr">Comparación de los planes de IndieForge</caption>
+        <thead>
+          <tr>
+            <td></td>
+            <th scope="col"><span class="pn">Jam Pass</span><span class="pp num">$0</span><span class="pu">7 días, en game jams aliadas</span></th>
+            <th scope="col"><span class="pn">Educativo</span><span class="pp num">$9.99</span><span class="pu">USD al mes</span></th>
+            <th scope="col" class="hl"><span class="pn">Indie Comercial</span><span class="pp num">$24.99</span><span class="pu">USD al mes · $239.90 al año</span></th>
+            <th scope="col"><span class="pn">Studio</span><span class="pp num">$79.99</span><span class="pu">USD al mes</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Para quién</th><td>Participantes de game jams aliadas</td><td>Estudiantes y autodidactas</td><td class="hl">Desarrolladores independientes y freelancers que publican</td><td>Microestudios de 2 a 10 personas e instituciones</td></tr>
+          <tr><th scope="row">Catálogo y plugins</th><td>Completo durante la jam</td><td>Descargas ilimitadas</td><td class="hl">Descargas ilimitadas</td><td>Descargas ilimitadas</td></tr>
+          <tr><th scope="row">Uso permitido</th><td>Prototipo de la jam, publicable en itch.io</td><td>Clases, portafolio y prototipos no comerciales</td><td class="hl">Juegos comerciales en Steam, consolas y móvil</td><td>Juegos comerciales del estudio</td></tr>
+          <tr><th scope="row">Licencia</th><td>Para el prototipo de la jam</td><td>No comercial, se sube a Indie cuando quieras</td><td class="hl">Perpetua para los juegos publicados mientras estés suscrito</td><td>Perpetua y multiusuario</td></tr>
+          <tr><th scope="row">Certificado de licencia</th><td>No</td><td>No</td><td class="hl yes">Automático por paquete</td><td class="yes">Automático por paquete</td></tr>
+          <tr><th scope="row">Equipo</th><td>1 persona</td><td>1 persona</td><td class="hl">1 persona</td><td>5 asientos y repositorios compartidos por proyecto</td></tr>
+          <tr><th scope="row">Soporte y facturación</th><td>Sin tarjeta en eventos aliados</td><td>Soporte estándar</td><td class="hl">Soporte estándar, 20 % menos pagando al año</td><td>Soporte prioritario y facturación a empresa o universidad</td></tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td><a class="btn dark" href="mailto:?subject=IndieForge%3A%20quiero%20un%20Jam%20Pass&amp;body=Hola%2C%20quiero%20un%20c%C3%B3digo%20de%20Jam%20Pass%20para%20la%20game%20jam%3A%20">Pedir código</a></td>
+            <td><a class="btn dark" href="mailto:?subject=IndieForge%3A%20plan%20Educativo%20(%249.99%2Fmes)">Elegir Educativo</a></td>
+            <td class="hl"><a class="btn dark" href="mailto:?subject=IndieForge%3A%20plan%20Indie%20Comercial%20(%2424.99%2Fmes)">Elegir Indie</a></td>
+            <td><a class="btn dark" href="mailto:?subject=IndieForge%3A%20plan%20Studio%20(%2479.99%2Fmes)&amp;body=Somos%20un%20equipo%20de%20%20personas.">Hablar de Studio</a></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <p class="after rv" style="--i:3">El plan Studio también existe como licencia institucional para universidades. Los precios están en dólares estadounidenses.</p>
+  </div>
+</section>
+
+<section class="pool" id="creadores" aria-labelledby="pool-h">
+  <div class="wrap pool-grid">
+    <div>
+      <p class="big num rv" aria-hidden="true">45<span>%</span></p>
+      <h2 id="pool-h" class="rv" style="--i:1">El 45 % es de quien crea</h2>
+      <ul class="steps">
+        <li class="rv" style="--i:2"><strong>Sube tu paquete</strong><p>Artistas 3D y 2D, músicos y programadores publican sus kits después de una revisión técnica de calidad.</p></li>
+        <li class="rv" style="--i:3"><strong>Se mide el uso real</strong><p>El plugin registra cada importación y si el paquete sigue en proyectos activos. Lo ves en tu panel.</p></li>
+        <li class="rv" style="--i:4"><strong>Cobras cada mes</strong><p>El 45 % de lo que entra por suscripciones se reparte según ese uso, por Stripe o PayPal. Tú conservas la autoría.</p></li>
+      </ul>
+    </div>
+    <figure class="rv" style="--i:2">
+      <img src="img/taller-herrero-1771.jpg" width="1200" height="1678" loading="lazy" alt="Grabado de 1771: en un taller de herrería iluminado por la fragua, varios herreros trabajan una pieza mientras niños y vecinos miran.">
+      <figcaption>A Blacksmith's Shop, Richard Earlom según Joseph Wright of Derby, 1771. Art Institute of Chicago, dominio público.</figcaption>
+    </figure>
+  </div>
+  <div class="example">
+    <div class="wrap">
+      <h3 class="rv">Un ejemplo con números redondos</h3>
+      <p class="rv" style="--i:1">Si en un mes entran <b class="num">$10,000</b> por suscripciones, <b class="num">$4,500</b> van al fondo. Si tu paquete fue el 2 % de las importaciones de ese mes, recibes <b class="num">$90</b>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="jam" id="jam" aria-labelledby="jam-h">
+  <div class="wrap jam-grid">
+    <figure class="rv">
+      <img src="img/jam-berlin-2014.jpg" width="1600" height="1071" loading="lazy" alt="Una participante dibuja personajes de gato en una tableta gráfica junto a su laptop y un control, durante la Global Game Jam de Berlín.">
+      <figcaption>Global Game Jam Berlín 2014. Foto: Iwan Gabovitch, CC BY 2.0, vía Wikimedia Commons.</figcaption>
+    </figure>
+    <div>
+      <h2 id="jam-h" class="rv" style="--i:1">Una semana gratis en tu jam</h2>
+      <p class="statement rv" style="--i:2">En las game jams aliadas, tu equipo usa todo el catálogo durante 7 días sin pagar y sin tarjeta.</p>
+      <ul class="rv" style="--i:3">
+        <li>Los plugins de Unity, Unreal y Godot vienen incluidos.</li>
+        <li>Puedes publicar el prototipo en itch.io al terminar.</li>
+        <li>Si el proyecto sigue, pasas al plan Educativo o Indie sin perder lo importado.</li>
+      </ul>
+      <a class="btn rv" style="--i:4" href="mailto:?subject=IndieForge%3A%20c%C3%B3digo%20de%20Jam%20Pass&amp;body=Nombre%20de%20la%20game%20jam%3A%20%0AFechas%3A%20%0ATama%C3%B1o%20del%20equipo%3A%20">Pedir el código de mi jam</a>
+    </div>
+  </div>
+</section>
+
+<section class="faq" id="preguntas" aria-labelledby="faq-h">
+  <div class="wrap faq-grid">
+    <div class="faq-side">
+      <h2 id="faq-h" class="rv">Antes de suscribirte</h2>
+      <figure class="rv" style="--i:1">
+        <img src="img/jam-arles-2019.jpg" width="1600" height="1067" loading="lazy" alt="Una sala con decenas de estudiantes trabajando en computadoras durante una game jam.">
+        <figcaption>Global Game Jam 2019 en Arles. Foto: Yannickvernet, CC BY-SA 4.0, vía Wikimedia Commons.</figcaption>
+      </figure>
+    </div>
+    <div>
+      <details class="rv" style="--i:1" open>
+        <summary>Si cancelo, ¿qué pasa con el juego que ya publiqué?</summary>
+        <div class="a"><p>Nada. Con el plan Indie Comercial o Studio, cada juego que publicas mientras estás suscrito queda cubierto para siempre. El plugin genera un certificado por paquete que puedes guardar con tu proyecto. Lo que ya no puedes hacer al cancelar es importar paquetes nuevos ni lanzar juegos nuevos con ellos.</p></div>
+      </details>
+      <details class="rv" style="--i:2">
+        <summary>¿Con qué versiones de los motores funciona?</summary>
+        <div class="a"><p>El plugin está pensado para Unity 6 (URP y HDRP), Unreal Engine 5.5 y Godot 4.3. Cada paquete del catálogo dice con qué motores es compatible; por ejemplo, el sistema de inventario RPG es para Unity y Godot, y la plantilla multijugador para Unity y Unreal. Puedes filtrar el catálogo por motor.</p></div>
+      </details>
+      <details class="rv" style="--i:3">
+        <summary>Soy estudiante. ¿Puedo usar el plan Educativo en mi juego final?</summary>
+        <div class="a"><p>Sí, para entregas de clase, tu portafolio y prototipos. Si después quieres vender ese juego, cambias al plan Indie Comercial desde tu cuenta y la licencia comercial cubre el juego desde ese momento. No tienes que volver a importar nada.</p></div>
+      </details>
+      <details class="rv" style="--i:4">
+        <summary>¿Cómo se calcula el pago a los creadores?</summary>
+        <div class="a"><p>Cada mes se separa el 45 % de lo que entra por suscripciones. Ese fondo se reparte según las importaciones reales de cada paquete y su permanencia en proyectos activos, que el plugin registra. El pago llega por Stripe o PayPal.</p></div>
+      </details>
+      <details class="rv" style="--i:5">
+        <summary>¿Qué necesita mi game jam para tener Jam Pass?</summary>
+        <div class="a"><p>Que los organizadores se registren como jam aliada. Cada participante recibe un código válido por 7 días, sin tarjeta de crédito. Si eres participante, puedes pedir el código desde la sección de Jam Pass con el nombre y las fechas de tu jam.</p></div>
+      </details>
+      <details class="rv" style="--i:6">
+        <summary>¿Cuántas personas pueden usar una cuenta Studio?</summary>
+        <div class="a"><p>Cinco asientos sincronizados, con repositorios de assets compartidos por proyecto, soporte prioritario y factura a nombre del estudio o de la institución.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="wordmark" aria-hidden="true">Indie<span>Forge</span></p>
+    <div class="foot">
+      <div>
+        <h3>Equipo</h3>
+        <p>Emmanuel Deraz Labrador, 2208862<br>Javier Isaac Salazar Leal, 2208260</p>
+        <p class="dim">Catálogo y demostración digital, versión 1. Los paquetes y precios provienen de la propuesta de negocio de IndieForge.</p>
+      </div>
+      <div>
+        <h3>Curso</h3>
+        <p>Emprendimiento de Negocios de Software, Meta 5.1<br>Facultad de Ciencias Químicas e Ingeniería<br>Universidad Autónoma de Baja California<br>Noviembre de 2026</p>
+      </div>
+      <div>
+        <h3>Imágenes</h3>
+        <p class="dim"><a class="link" href="https://www.artic.edu/artworks/94078">An Iron Forge</a> (1773) y <a class="link" href="https://www.artic.edu/artworks/124663">A Blacksmith's Shop</a> (1771), Richard Earlom según Joseph Wright of Derby. Art Institute of Chicago, dominio público (CC0).</p>
+        <p class="dim"><a class="link" href="https://commons.wikimedia.org/wiki/File:Drawing_Cats_on_Wacom_Intuos3_A5_graphics_tablet_-_Global_Game_Jam_Berlin_2014.jpg">Global Game Jam Berlín 2014</a>, Iwan Gabovitch, <a class="link" href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>. <a class="link" href="https://commons.wikimedia.org/wiki/File:Global_Game_Jam_2019_%C3%A0_Arles.jpg">Global Game Jam 2019 en Arles</a>, Yannickvernet, <a class="link" href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  if (!location.search.includes('shot')) document.documentElement.classList.add('js');
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const money = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+  const slug = s => s.toLowerCase().replace(/&/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+
+  /* Filtros */
+  let cat = 'all', eng = 'all';
+  const rows = $$('#rows .row');
+  function filter() {
+    const q = $('#q').value.trim().toLowerCase();
+    let shown = 0;
+    rows.forEach(r => {
+      const ok = (cat === 'all' || r.dataset.cat === cat) &&
+                 (eng === 'all' || r.dataset.eng.includes(eng)) &&
+                 (!q || r.textContent.toLowerCase().includes(q));
+      r.hidden = !ok; if (ok) shown++;
+    });
+    $('#empty').hidden = shown > 0;
+  }
+  function seg(id, set) {
+    $$('#' + id + ' button').forEach(b => b.addEventListener('click', () => {
+      $$('#' + id + ' button').forEach(x => x.setAttribute('aria-pressed', x === b));
+      set(b.dataset.v); filter();
+    }));
+  }
+  seg('fCat', v => cat = v);
+  seg('fEng', v => eng = v);
+  $('#q').addEventListener('input', filter);
+
+  /* Ticket */
+  let plan = 24.99;
+  const bump = el => { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); };
+  function total() {
+    const picked = rows.filter(r => $('input', r).checked);
+    const sum = picked.reduce((a, r) => a + Number(r.dataset.price), 0);
+    $('#store').textContent = money(sum);
+    $('#cnt').textContent = picked.length === 1 ? '1 paquete' : picked.length + ' paquetes';
+    $('#ours').textContent = money(plan);
+    const d = Math.round((sum - plan) * 100) / 100;
+    $('#diff').textContent = d > 0 ? money(d) : '$0';
+    $('#queueN').textContent = picked.length;
+    [$('#store'), $('#diff')].forEach(bump);
+  }
+  rows.forEach(r => $('input', r).addEventListener('change', e => { total(); if (e.target.checked) loadPack(r); }));
+  $$('.plan-pick button').forEach(b => b.addEventListener('click', () => {
+    $$('.plan-pick button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    plan = Number(b.dataset.p); $('#planName').textContent = b.dataset.n; total();
+  }));
+
+  /* Plugin */
+  let engName = 'Unity 6 (URP)', engPath = 'Assets/IndieForge/Imported/', packEng = 'Unity Unreal Godot';
+  const engKey = () => engName.split(' ')[0];
+  const fits = () => packEng.includes(engKey());
+  const log = $('#log');
+  function setPath() { $('#uiPath').textContent = engPath + slug($('#uiName').textContent) + '/'; }
+  function loadPack(r) {
+    $('#uiName').textContent = $('.name', r).textContent;
+    $('#uiDesc').textContent = $('.spec', r).textContent;
+    packEng = r.dataset.eng;
+    setPath();
+  }
+  $$('.ui-tabs button').forEach(b => b.addEventListener('click', () => {
+    $$('.ui-tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
+    engName = b.dataset.name; engPath = b.dataset.path;
+    $('#uiEngine').textContent = engName; setPath();
+    log.innerHTML = `[Bridge] Motor cambiado a <span class="y">${engName}</span>.\n[Bridge] Destino: ${$('#uiPath').textContent}`;
+    $('#prog').style.width = '0';
+  }));
+  $('#importBtn').addEventListener('click', () => {
+    const name = $('#uiName').textContent, prog = $('#prog');
+    if (!fits()) {
+      prog.style.width = '0';
+      log.innerHTML = `[Bridge] «${name}» no es compatible con ${engName}.
+[Bridge] Motores compatibles: <span class="y">${packEng.split(' ').join(', ')}</span>. Cambia de motor o elige otro paquete en el catálogo.`;
+      return;
+    }
+    prog.style.transition = 'none'; prog.style.width = '0'; void prog.offsetWidth;
+    prog.style.transition = ''; prog.style.width = '100%';
+    log.textContent = `[Bridge] Descargando «${name}»…`;
+    setTimeout(() => { log.textContent += `\n[Bridge] Creando materiales para ${engName}…`; }, 450);
+    setTimeout(() => {
+      log.innerHTML += `\n<span class="g">[Bridge] Listo en 1.8 s.</span> Archivos en ${$('#uiPath').textContent}\n[Bridge] Uso registrado para el fondo de creadores (45 %).`;
+    }, 950);
+  });
+  $('#certBtn').addEventListener('click', () => {
+    const name = $('#uiName').textContent;
+    log.innerHTML = `[Bridge] Certificado IF-2026-89B1-${slug(name).slice(0, 6).toUpperCase()}\n<span class="y">Licencia comercial perpetua</span> para «${name}» en el proyecto actual, válida para el juego publicado durante la suscripción.`;
+  });
+
+  total(); filter();
+
+  /* Entradas al hacer scroll */
+  const els = $$('.rv');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    }), { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    els.forEach(el => io.observe(el));
+  } else els.forEach(el => el.classList.add('in'));
+})();
+</script>
+</body>
+</html>
